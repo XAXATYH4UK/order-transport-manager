@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Заказы - Order Manager{% endblock %}
+
+{% block content %}
+    <h1>Управление заказами</h1>
+    
+    <!-- Панель фильтрации -->
+    <div class="filter-panel">
+        <h3>Фильтры</h3>
+        <form method="GET" class="filter-form">
+            <div class="filter-row">
+                <label for="status">Статус:</label>
+                <select name="status" id="status">
+                    <option value="">Все статусы</option>
+                    {% for status in statuses %}
+                        <option value="{{ status }}" 
+                               {% if status == current_status %}selected{% endif %}>
+                            {{ status }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-row">
+                <label for="client">Клиент:</label>
+                <input type="text" name="client" id="client" 
+                       value="{{ current_client }}" 
+                       placeholder="Поиск по имени клиента">
+            </div>
+            
+            <div class="filter-row">
+                <label for="date_from">Дата загрузки с:</label>
+                <input type="date" name="date_from" id="date_from" 
+                       value="{{ current_date_from }}">
+            </div>
+            
+            <div class="filter-row">
+                <label for="date_to">Дата доставки до:</label>
+                <input type="date" name="date_to" id="date_to" 
+                       value="{{ current_date_to }}">
+            </div>
+            
+            <div class="filter-buttons">
+                <button type="submit">Применить фильтры</button>
+                <a href="/" class="clear-btn">Очистить</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="actions">
+        <div>
+            <a href="/add" class="add-btn">+ Добавить новый заказ</a>
+            <button onclick="exportToCSV()" class="export-btn" title="Экспорт в CSV">📊 Экспорт</button>
+        </div>
+        <span class="results-count">Найдено заказов: {{ orders|length }}</span>
+    </div>
+    
+    <table border="1" class="orders-table">
+        <tr>
+            <th>Дата загрузки</th>
+            <th>Дата доставки</th>
+            <th>Номер заказа</th>
+            <th>Клиент</th>
+            <th>Груз</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.load_date or '-' }}</td>
+            <td>{{ order.delivery_date or '-' }}</td>
+            <td>{{ order.order_number }}</td>
+            <td>{{ order.client_name or '-' }}</td>
+            <td>{{ order.cargo_description or '-' }}</td>
+            <td class="status status-{{ order.status|replace(' ', '-')|lower }}">
+                {{ order.status or '-' }}
+            </td>
+            <td class="actions-cell">
+                <a href="/edit/{{ order.id }}" class="edit-btn" title="Редактировать">✏️</a>
+                <a href="/delete/{{ order.id }}" class="delete-btn" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить этот заказ?')">🗑️</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" class="no-results">Заказы не найдены</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

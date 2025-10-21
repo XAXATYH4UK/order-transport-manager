@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Редактировать заказ {{ order.order_number }} - Order Manager{% endblock %}
+
+{% block content %}
+    <h1>Редактировать заказ {{ order.order_number }}</h1>
+    
+    <div class="form-container">
+        <form method="POST" class="order-form">
+            <div class="form-group">
+                <label for="order_number">Номер заказа:</label>
+                <input type="text" name="order_number" id="order_number" value="{{ order.order_number }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="client_name">Клиент:</label>
+                <input type="text" name="client_name" id="client_name" value="{{ order.client_name or '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="cargo_description">Описание груза:</label>
+                <textarea name="cargo_description" id="cargo_description" rows="3">{{ order.cargo_description or '' }}</textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="load_date">Дата загрузки:</label>
+                    <input type="date" name="load_date" id="load_date" value="{{ order.load_date or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="delivery_date">Дата доставки:</label>
+                    <input type="date" name="delivery_date" id="delivery_date" value="{{ order.delivery_date or '' }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Статус:</label>
+                <select name="status" id="status">
+                    <option value="Scheduled for Loading" {% if order.status == 'Scheduled for Loading' %}selected{% endif %}>Запланировано к загрузке</option>
+                    <option value="In transit" {% if order.status == 'In transit' %}selected{% endif %}>В пути</option>
+                    <option value="Under Customs Clearance" {% if order.status == 'Under Customs Clearance' %}selected{% endif %}>Таможенное оформление</option>
+                    <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Доставлено</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Сохранить изменения</button>
+                <a href="/" class="cancel-btn">Отмена</a>
+                <a href="/delete/{{ order.id }}" class="delete-btn" onclick="return confirm('Вы уверены, что хотите удалить этот заказ?')">Удалить</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

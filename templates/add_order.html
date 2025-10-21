@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить заказ - Order Manager{% endblock %}
+
+{% block content %}
+    <h1>Добавить новый заказ</h1>
+    
+    <div class="form-container">
+        <form method="POST" class="order-form">
+            <div class="form-group">
+                <label for="order_number">Номер заказа:</label>
+                <input type="text" name="order_number" id="order_number" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="client_name">Клиент:</label>
+                <input type="text" name="client_name" id="client_name">
+            </div>
+            
+            <div class="form-group">
+                <label for="cargo_description">Описание груза:</label>
+                <textarea name="cargo_description" id="cargo_description" rows="3"></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="load_date">Дата загрузки:</label>
+                    <input type="date" name="load_date" id="load_date">
+                </div>
+                
+                <div class="form-group">
+                    <label for="delivery_date">Дата доставки:</label>
+                    <input type="date" name="delivery_date" id="delivery_date">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Статус:</label>
+                <select name="status" id="status">
+                    <option value="Scheduled for Loading">Запланировано к загрузке</option>
+                    <option value="In transit">В пути</option>
+                    <option value="Under Customs Clearance">Таможенное оформление</option>
+                    <option value="Delivered">Доставлено</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Сохранить заказ</button>
+                <a href="/" class="cancel-btn">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
